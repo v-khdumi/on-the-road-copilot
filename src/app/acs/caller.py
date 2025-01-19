@@ -32,6 +32,7 @@ class OutboundCall:
     source_number: str
     acs_connection_string: str
     acs_callback_path: str
+    conversation_history: List[dict] = []
 
     def __init__(self, source_number:str, acs_connection_string: str, acs_callback_path: str):
         self.source_number = source_number
@@ -83,12 +84,20 @@ class OutboundCall:
                 print(call_connection_properties)
                 media_streaming_subscription = call_connection_properties.media_streaming_subscription
                 print(media_streaming_subscription)
+                self.conversation_history.append({
+                    'call_connection_id': call_connection_id,
+                    'event_type': event.type,
+                    'timestamp': event.time
+                })
                 return web.Response(status=200)
         
         return web.Response(status=500)
 
     async def _get_source_number(self):
        return self.source_number
+
+    async def get_conversation_history(self):
+        return self.conversation_history
 
     def attach_to_app(self, app, path):
         app.router.add_post(path, self._outbound_call_handler)
