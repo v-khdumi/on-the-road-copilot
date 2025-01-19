@@ -128,7 +128,13 @@ async def create_app():
             body = await request.json()
             print(body)
             target_number = body['target_number']
-            return await caller.call(target_number)
+            response = await caller.call(target_number)
+            caller.conversation_history.append({
+                'target_number': target_number,
+                'timestamp': time.time(),
+                'status': 'initiated'
+            })
+            return response
         else:
             return web.Response(text="Outbound calling is not configured")
 
@@ -150,10 +156,18 @@ async def create_app():
         
         return web.json_response(acs_status)
 
+    async def get_conversation_history(request):
+        if caller is not None:
+            history = await caller.get_conversation_history()
+            return web.json_response(history)
+        else:
+            return web.json_response([])
+
     app.router.add_get('/', index)
     app.router.add_static('/static/', path=str(static_directory), name='static')
     app.router.add_post('/call', call)
     app.router.add_get('/status', acs_status)
+    app.router.add_get('/conversation_history', get_conversation_history)
 
     return app
 

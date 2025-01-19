@@ -2,6 +2,7 @@ const toggleButton = document.getElementById('toggleButton');
 const callButton = document.getElementById('callButton');
 const statusMessage = document.getElementById('statusMessage');
 const reportDiv = document.getElementById('report');
+const historyList = document.getElementById('historyList');
 
 let isRecording = false;
 let websocket = null;
@@ -311,4 +312,20 @@ window.onload = function() {
             }
         )
         .catch(error => console.error('Error:', error));
+
+    fetchConversationHistory();
 };
+
+function fetchConversationHistory() {
+    fetch('/conversation_history')
+        .then(response => response.json())
+        .then(data => {
+            historyList.innerHTML = '';
+            data.forEach(item => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `Call ID: ${item.call_connection_id}, Event: ${item.event_type}, Timestamp: ${new Date(item.timestamp).toLocaleString()}`;
+                historyList.appendChild(listItem);
+            });
+        })
+        .catch(error => console.error('Error fetching conversation history:', error));
+}

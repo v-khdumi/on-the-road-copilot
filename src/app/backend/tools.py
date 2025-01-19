@@ -63,3 +63,59 @@ _get_report_fields_tool_schema = {
         "additionalProperties": False
     }
 }
+
+async def _fetch_conversation_history_tool(args: Any) -> ToolResult:
+    # Placeholder for the actual implementation to fetch conversation history
+    conversation_history = [
+        {
+            "call_connection_id": "12345",
+            "event_type": "CallConnected",
+            "timestamp": "2023-09-01T12:00:00Z"
+        },
+        {
+            "call_connection_id": "67890",
+            "event_type": "CallDisconnected",
+            "timestamp": "2023-09-01T12:30:00Z"
+        }
+    ]
+    return ToolResult(conversation_history, ToolResultDirection.TO_CLIENT)
+
+_fetch_conversation_history_tool_schema = {
+    "type": "function",
+    "name": "fetch_conversation_history",
+    "description": "Fetches the conversation history for both browser and phone interactions.",
+    "parameters": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": False
+    }
+}
+
+async def _fetch_questionnaire_and_answers_tool(args: Any) -> ToolResult:
+    # Placeholder for the actual implementation to fetch questionnaire and answers
+    questionnaire_and_answers = {
+        "questionnaire": [
+            {
+                "question": "What is your department name?",
+                "answer": "Sales"
+            },
+            {
+                "question": "How did your demo meeting with the customer go?",
+                "answer": "It went well."
+            }
+        ]
+    }
+    return ToolResult(questionnaire_and_answers, ToolResultDirection.TO_CLIENT)
+
+_fetch_questionnaire_and_answers_tool_schema = {
+    "type": "function",
+    "name": "fetch_questionnaire_and_answers",
+    "description": "Fetches the questionnaire and answers from the get_report_fields tool.",
+    "parameters": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": False
+    }
+}
