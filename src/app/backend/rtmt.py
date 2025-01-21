@@ -93,9 +93,9 @@ class RTMiddleTier:
                     "tools": [tool.schema for tool in self.tools.values()],
                     "turn_detection": {
                         "type": 'server_vad',
-                        "threshold": 0.7, # Adjust if necessary
-                        "prefix_padding_ms": 300, # Adjust if necessary
-                        "silence_duration_ms": 500 # Adjust if necessary
+                        "threshold": 0.2, # Adjust if necessary
+                        "prefix_padding_ms": 500, # Adjust if necessary
+                        "silence_duration_ms": 1000 # Adjust if necessary
                     },
                 }
             }
@@ -227,6 +227,16 @@ class RTMiddleTier:
                         if replace:
                             updated_message = json.dumps(message)
 
+                case "buffer.speech":
+                    if message["state"] == "start":
+                        await client_ws.send_json({
+                            "type": "input_audio_buffer.speech_started"
+                        })
+                    elif message["state"] == "stop":
+                        await client_ws.send_json({
+                            "type": "input_audio_buffer.speech_stopped"
+                        })
+
         # Transform the message to the Azure Communication Services format,
         # if it comes from the OpenAI realtime stream.
         if is_acs_audio_stream and updated_message is not None:
@@ -261,6 +271,16 @@ class RTMiddleTier:
                     session["tools"] = [tool.schema for tool in self.tools.values()]
                     message["session"] = session
                     updated_message = json.dumps(message)
+
+                case "buffer.speech":
+                    if message["state"] == "start":
+                        await ws.send_json({
+                            "type": "input_audio_buffer.speech_started"
+                        })
+                    elif message["state"] == "stop":
+                        await ws.send_json({
+                            "type": "input_audio_buffer.speech_stopped"
+                        })
 
         return updated_message
 

@@ -2,6 +2,7 @@ const toggleButton = document.getElementById('toggleButton');
 const callButton = document.getElementById('callButton');
 const statusMessage = document.getElementById('statusMessage');
 const reportDiv = document.getElementById('report');
+const systemMessageInput = document.getElementById('systemMessageInput');
 
 let isRecording = false;
 let websocket = null;
@@ -161,8 +162,18 @@ function onCallButton() {
     });
 }
 
+function onSystemMessageInput() {
+    const systemMessage = systemMessageInput.value;
+    const systemMessageUpdate = {
+        type: 'system_message.update',
+        message: systemMessage
+    };
+    websocket.send(JSON.stringify(systemMessageUpdate));
+}
+
 toggleButton.addEventListener('click', onToggleListening);
 callButton.addEventListener('click', onCallButton);
+systemMessageInput.addEventListener('input', onSystemMessageInput);
 
 function handleWebSocketMessage(message) {
     switch (message.type) {

@@ -92,3 +92,9 @@ class OutboundCall:
 
     def attach_to_app(self, app, path):
         app.router.add_post(path, self._outbound_call_handler)
+
+    async def handle_speech_started(self):
+        print("Speech started")
+
+    async def handle_speech_stopped(self):
+        print("Speech stopped")

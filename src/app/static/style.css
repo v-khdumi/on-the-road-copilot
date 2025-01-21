@@ -100,3 +100,42 @@ form button {
 #report:not(:empty) {
     display: block;
 }
+
+/* Media queries for mobile responsiveness */
+@media (max-width: 768px) {
+    main.container {
+        padding: 1rem;
+    }
+
+    article {
+        padding: 1rem;
+    }
+
+    h1 {
+        font-size: 2em;
+    }
+
+    .black-button {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+
+    #toggleButton {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+
+    form input[type="text"],
+    form button {
+        max-width: 100%;
+        font-size: 14px;
+    }
+
+    #statusMessage {
+        font-size: 14px;
+    }
+
+    #report {
+        padding: 10px;
+    }
+}
